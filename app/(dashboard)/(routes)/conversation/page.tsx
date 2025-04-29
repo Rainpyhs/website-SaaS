@@ -6,7 +6,7 @@ import { MessageSquare } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import { ChatCompletionMessageParam } from "openai/resources/chat/completions";
+
 
 
 import { Heading } from "@/components/heading"
@@ -28,7 +28,7 @@ type Message = {
     role : "user" | "assistant" |"system";
     content: string;
 };
-const conversationPage = () => {
+const ConversationPage = () => {
     const router = useRouter();
     const [messages, setMessages] = useState<Message[]>([]);
     
@@ -54,10 +54,14 @@ const conversationPage = () => {
             setMessages ((current) => [...current, userMessage,  response.data ]);
             form.reset(); 
 
-        } catch (error: any) {
-            //TODO : open pro modal 
-            console.log(error);
-        } finally {
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            } else {
+                console.log("Unknown error", error);
+            }
+        }
+        finally {
             router.refresh();
         }
     }
@@ -128,4 +132,4 @@ const conversationPage = () => {
     )
 }
 
-export default conversationPage;
+export default ConversationPage;

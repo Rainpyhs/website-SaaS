@@ -5,8 +5,8 @@ import { Montserrat } from "next/font/google"
 
 import { cn } from "@/lib/utils"
 import { LayoutDashboard, MessageSquare, ImageIcon, VideoIcon, Music, Code, Settings } from "lucide-react"
-import {SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { usePathname } from "next/navigation"
+import { SheetTitle } from "@/components/ui/sheet"
 
 const montserrat = Montserrat({
     weight : "600",

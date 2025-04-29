@@ -30,12 +30,14 @@ export async function POST(req: Request) {
 
         return NextResponse.json(response.choices[0].message);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("[CONVERSATION_ERROR]", error);
+        if( typeof error === 'object' && error !== null){
+            const err = error as { status?: number; code?: string };
 
-        // Tangani error quota OpenAI
-        if (error?.status === 429 || error?.code === 'insufficient_quota') {
-            return new NextResponse("OpenAI Quota Exceeded. Cek billing akun kamu.", { status: 429 });
+            if (err.status === 429 || err.code === 'insufficient_quota') {
+                    return new NextResponse("OpenAI Quota Exceeded. Cek your account billing.", { status: 429 });
+            }
         }
 
         return new NextResponse("Internal error", { status: 500 });

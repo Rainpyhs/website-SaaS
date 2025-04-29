@@ -8,7 +8,6 @@ import { Code } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import { ChatCompletionMessageParam } from "openai/resources/chat/completions"
 import ReactMarkdown from "react-markdown"
 
 
@@ -33,7 +32,7 @@ type Message = {
     role : "user" | "assistant" |"system";
     content: string;
 };
-const codePage = () => {
+const CodePage = () => {
     const router = useRouter();
     const [messages, setMessages] = useState<Message[]>([]);
     
@@ -59,10 +58,14 @@ const codePage = () => {
             setMessages ((current) => [...current, userMessage,  response.data ]);
             form.reset(); 
 
-        } catch (error: any) {
-            //TODO : open pro modal 
-            console.log(error);
-        } finally {
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            } else {
+                console.log("Unknown error", error);
+            }
+        }
+        finally {
             router.refresh();
         }
     }
@@ -123,13 +126,13 @@ const codePage = () => {
                                 <div className="text-sm overflow-hidden leading-7">
                                 <ReactMarkdown
                                 components = {{
-                                    pre : ({node, ...props}) => (
+                                    pre : ({ ...props}) => (
                                         <div className="overflow-auto w-full my-2 bg-black/10 p-2 rounded-lg">
                                             <pre {...props}/>
                                         </div>
 
                                     ),
-                                    code : ({node, ...props}) => (
+                                    code : ({ ...props}) => (
                                         <code className="bg-black/10  rounded-lg  p-1" {...props}/>
                                     )
 
@@ -148,4 +151,4 @@ const codePage = () => {
     )
 }
 
-export default codePage;
+export default CodePage;

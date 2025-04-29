@@ -21,13 +21,13 @@ import { Card, CardFooter } from "@/components/ui/card"
 
 import { amountOptions, formSchema, resolutionOptions } from "./constants"
 
-import {cn } from "@/lib/utils"
 
 
 
 
 
-const imagePage = () => {
+
+const ImagePage = () => {
     const router = useRouter();
     const [images, setImages] = useState<string[]>([])
     
@@ -50,10 +50,14 @@ const imagePage = () => {
             setImages(urls)
             form.reset(); 
 
-        } catch (error: any) {
-            //TODO : open pro modal 
-            console.log(error);
-        } finally {
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log(error.message);
+            } else {
+                console.log("Unknown error", error);
+            }
+        }
+        finally {
             router.refresh();
         }
     }
@@ -195,4 +199,4 @@ const imagePage = () => {
     )
 }
 
-export default imagePage;
+export default ImagePage;
